@@ -14,25 +14,18 @@ const instance = axios.create({
 
 let res;
 
-Given('realizar requisicao de busca do filme {int} {string}', async (page, title) => {
+Given('realizar requisicao de busca de tendencia {string} {string}', async function (mediaType, timeWindow) {
     res = await instance({
         method: 'get',
-        url: `/search/movie?language=pt-BR&query=${title}&page=${page}`
+        url: `/trending/${mediaType}/${timeWindow}?language=pt-BR`
     })
     .catch(error => {
       console.log(error);
     });
 });
 
-Then('validar o resultado da busca {int} {int} {int} {int} {string}', (page, pages, results, id, title ) => {
-    assert.equal(res.data.page, page);
-    assert.equal(res.data.total_pages, pages);
-    assert.equal(res.data.total_results, results);
-
+Then('validar o resultado da busca de tendencia {string}', function (mediaType) {
     for(var i = 0; i < res.data.results.length; i++){
-        if(res.data.results[i].id == id) {
-            assert.equal(res.data.results[i].id, id);
-            assert.equal(res.data.results[i].title, title);
-        }
+        assert.equal(res.data.results[i].media_type, mediaType);
     }
 });
