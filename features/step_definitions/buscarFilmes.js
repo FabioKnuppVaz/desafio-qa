@@ -6,7 +6,7 @@ const access_token = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0YWM0ZGQ5ODU1ODAyYTY1NGJkN
 
 const instance = axios.create({
     baseURL: 'https://api.themoviedb.org/3',
-    timeout: 1000,
+    timeout: 5000,
     headers: {'Authorization': `Bearer ${access_token}`},
     responseType: 'json',
     responseEncoding: 'utf8'
@@ -14,14 +14,15 @@ const instance = axios.create({
 
 let res;
 
-Given('realizar requisicao de busca de filme {int} {string}', async (page, title) => {
+Given('realizar requisicao de busca de filme {int} {string} {string}', async (page, title, language) => {
     res = await instance({
         method: 'get',
-        url: `/search/movie?language=pt-BR&query=${title}&page=${page}`
+        url: `/search/movie?language=${language}&query=${title}&page=${page}`
     });
 });
 
 Then('validar o resultado da busca de filme {int} {int} {int} {int} {string}', (page, pages, results, id, title ) => {
+    assert.equal(res.status, 200);
     assert.equal(res.data.page, page);
     assert.equal(res.data.total_pages, pages);
     assert.equal(res.data.total_results, results);

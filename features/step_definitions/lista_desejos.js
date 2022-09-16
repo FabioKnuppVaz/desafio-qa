@@ -6,7 +6,7 @@ const access_token = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0YWM0ZGQ5ODU1ODAyYTY1NGJkN
 
 const instance = axios.create({
     baseURL: 'https://api.themoviedb.org/3',
-    timeout: 1000,
+    timeout: 5000,
     headers: {'Authorization': `Bearer ${access_token}`},
     responseType: 'json',
     responseEncoding: 'utf8'
@@ -15,23 +15,22 @@ const instance = axios.create({
 let res;
 let list_id;
 
-Given('realizar requisicao para criar uma lista', async function () {
+Given('realizar requisicao para criar uma lista', async function (table) {
     res = await instance({
         method: 'post',
         url: `/list`,
-        data: {
-            "name": "teste",
-            "description": "teste",
-            "language": "pt-BR"
-        }
+        data: table.hashes()[0]
     });
 
     list_id = res.data.list_id;
 });
 
-Then('validar o resultado da criacao da lista', function () {
-    assert.equal(res.data.status_code, 1);
-    assert.equal(res.data.status_message, 'The item/record was created successfully.');
+Then('validar o resultado da criacao da lista', function (table) {
+    esperado = table.hashes()[0]
+
+    assert.equal(res.status, 201);
+    assert.equal(res.data.status_code, esperado.status_code);
+    assert.equal(res.data.status_message, esperado.status_message);
     assert.equal(res.data.success, true);
     assert.notEqual(res.data.list_id, null);
 });
@@ -43,60 +42,70 @@ Given('realizar requisicao para ver os detalhes da lista', async function () {
     });
 });
 
-Then('validar o resultado dos detalhes da lista', function () {
-    assert.equal(res.data.created_by, 'FabioVaz');
-    assert.equal(res.data.description, 'teste');
+Then('validar o resultado dos detalhes da lista', function (table) {
+    esperado = table.hashes()[0]
+
+    assert.equal(res.status, 200);
+    assert.equal(res.data.created_by, esperado.created_by);
+    assert.equal(res.data.description, esperado.description);
     assert.equal(res.data.favorite_count, 0);
     assert.notEqual(res.data.id, null);
     assert.notEqual(res.data.items, null);
     assert.equal(res.data.item_count, 0);
-    assert.equal(res.data.iso_639_1, 'pt');
-    assert.equal(res.data.name, 'teste');
+    assert.equal(res.data.iso_639_1, esperado.iso_639_1);
+    assert.equal(res.data.name, esperado.name);
     assert.equal(res.data.poster_path, null);
 });
 
-When('realizar requisicao para adicionar filme na lista', async function () {
+When('realizar requisicao para adicionar filme id {string} na lista', async function (media_id) {
     res = await instance({
         method: 'post',
         url: `/list/${list_id}/add_item`,
         data: {
-            "media_id": 18
+            "media_id": parseInt(media_id)
         }
     });
 });
 
-Then('validar o resultado do filme adicionado na lista', function () {
+Then('validar o resultado do filme adicionado na lista', function (table) {
+    esperado = table.hashes()[0]
+
+    assert.equal(res.status, 201);
     assert.equal(res.data.success, true);
-    assert.equal(res.data.status_code, 12);
-    assert.equal(res.data.status_message, 'The item/record was updated successfully.');
+    assert.equal(res.data.status_code, esperado.status_code);
+    assert.equal(res.data.status_message, esperado.status_message);
 });
 
-When('realizar requisicao para ver o status de um filme na lista', async function () {
+When('realizar requisicao para ver o status de um filme id {string} na lista', async function (media_id) {
     res = await instance({
         method: 'get',
-        url: `/list/${list_id}/item_status?movie_id=18`
+        url: `/list/${list_id}/item_status?movie_id=${media_id}`
     });
 });
 
 Then('validar o resultado do status de um filme na lista', function () {
+    assert.equal(res.status, 200);
     assert.equal(res.data.id, null);
     assert.equal(res.data.item_present, true);
 });
 
-Given('realizar requisicao para remover filme da lista', async function () {
+Given('realizar requisicao para remover filme id {string} da lista', async function (media_id) {
     res = await instance({
         method: 'post',
         url: `/list/${list_id}/remove_item`,
         data: {
-            "media_id": 18
+            "media_id": parseInt(media_id)
         }
     });
 });
 
-Then('validar o resultado do filme removido da lista', function () {
+Then('validar o resultado do filme removido da lista', function (table) {
+    esperado = table.hashes()[0]
+
+    assert.equal(res.status, 200);
     assert.equal(res.data.success, true);
-    assert.equal(res.data.status_code, 13);
-    assert.equal(res.data.status_message, 'The item/record was deleted successfully.');
+    assert.equal(res.data.status_code, esperado.status_code);
+    assert.equal(res.data.status_message, esperado.status_message);
 });
 
 When('realizar requisicao para limpar lista', async function () {
@@ -106,10 +115,13 @@ When('realizar requisicao para limpar lista', async function () {
     });
 });
 
-Then('validar o resultado da limpeza da lista', function () {
+Then('validar o resultado da limpeza da lista', function (table) {
+    esperado = table.hashes()[0]
+
+    assert.equal(res.status, 201);
     assert.equal(res.data.success, true);
-    assert.equal(res.data.status_code, 12);
-    assert.equal(res.data.status_message, 'The item/record was updated successfully.');
+    assert.equal(res.data.status_code, esperado.status_code);
+    assert.equal(res.data.status_message, esperado.status_message);
 });
 
 When('realizar requisicao para deletar uma lista', async function () {

@@ -1,3 +1,3 @@
 module.exports = {
-    default: `--publish --format-options '{"snippetInterface": "synchronous"}'`
+    default: `--publish --tags @Listas_desejos --format-options '{"snippetInterface": "synchronous"}'`
 }

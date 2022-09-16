@@ -6,7 +6,7 @@ const access_token = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0YWM0ZGQ5ODU1ODAyYTY1NGJkN
 
 const instance = axios.create({
     baseURL: 'https://api.themoviedb.org/3',
-    timeout: 1000,
+    timeout: 5000,
     headers: {'Authorization': `Bearer ${access_token}`},
     responseType: 'json',
     responseEncoding: 'utf8'
@@ -14,14 +14,15 @@ const instance = axios.create({
 
 let res;
 
-Given('realizar requisicao de busca de tendencia {string} {string}', async function (mediaType, timeWindow) {
+Given('realizar requisicao de busca de tendencia {string} {string} {string}', async function (mediaType, timeWindow, language) {
     res = await instance({
         method: 'get',
-        url: `/trending/${mediaType}/${timeWindow}?language=pt-BR`
+        url: `/trending/${mediaType}/${timeWindow}?language=${language}`
     });
 });
 
 Then('validar o resultado da busca de tendencia {string}', function (mediaType) {
+    assert.equal(res.status, 200);
     for(var i = 0; i < res.data.results.length; i++){
         assert.equal(res.data.results[i].media_type, mediaType);
     }
