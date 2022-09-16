@@ -1,6 +1,7 @@
 @Tendencias
 Feature: Buscar tendencias
 
+  @Buscar_tendencias
   Scenario Outline: Buscar tendencias
     Given realizar requisicao de busca de tendencia "<mediaType>" "<timeWindow>"
     Then validar o resultado da busca de tendencia "<mediaType>"

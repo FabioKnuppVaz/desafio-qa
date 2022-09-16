@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "cucumber-js --tags @Filmes"
+    "test": "cucumber-js --tags @Deletar_lista"
   },
   "keywords": [],
   "author": "",

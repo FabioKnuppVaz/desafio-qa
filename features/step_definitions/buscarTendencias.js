@@ -18,9 +18,6 @@ Given('realizar requisicao de busca de tendencia {string} {string}', async funct
     res = await instance({
         method: 'get',
         url: `/trending/${mediaType}/${timeWindow}?language=pt-BR`
-    })
-    .catch(error => {
-      console.log(error);
     });
 });
 

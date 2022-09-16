@@ -18,9 +18,6 @@ Given('realizar requisicao de busca de filme {int} {string}', async (page, title
     res = await instance({
         method: 'get',
         url: `/search/movie?language=pt-BR&query=${title}&page=${page}`
-    })
-    .catch(error => {
-      console.log(error);
     });
 });
 
