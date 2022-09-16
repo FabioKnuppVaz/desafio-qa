@@ -1,4 +1,4 @@
-@Listas
+@Listas_desejos
 Feature: Listas de desejos
 
   Background: Criar lista
