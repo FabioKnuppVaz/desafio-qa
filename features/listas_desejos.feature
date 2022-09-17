@@ -22,12 +22,16 @@ Feature: Listas de desejos
     * realizar requisicao para deletar uma lista
 
   @Adicionar_filme_lista
-  Scenario: Adicionar filme na lista
-    When realizar requisicao para adicionar filme id "18" na lista
-    Then validar o resultado do filme adicionado na lista
-      | status_code | status_message                            |
-      | 12          | The item/record was updated successfully. |
+  Scenario Outline: Adicionar filme na lista
+    When realizar requisicao para adicionar filme id "<id>" na lista
+    Then validar o resultado do filme adicionado na lista "<http>" "<status_code>" "<status_message>"
     * realizar requisicao para deletar uma lista
+
+    Examples:
+      | id | http | status_code | status_message                                             |
+      | 18 | 201  | 12          | The item/record was updated successfully.                  |
+      | 0  | 404  | 34          | The resource you requested could not be found.             |
+      |    | 400  | 5           | Invalid parameters: Your request parameters are incorrect. |
 
   @Status_filme_lista
   Scenario: Status de um filme na lista

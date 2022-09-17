@@ -53,28 +53,31 @@ Then('validar o resultado dos detalhes da lista', function (table) {
 });
 
 When('realizar requisicao para adicionar filme id {string} na lista', async function (media_id) {
+    data = media_id == "" ? {} : { "media_id": media_id }
+    
     res = await instance({
         method: 'post',
         url: `/list/${list_id}/add_item`,
-        data: {
-            "media_id": parseInt(media_id)
-        }
+        data: data,
+        validateStatus: function(status) {
+            return true;
+        },
     });
 });
 
-Then('validar o resultado do filme adicionado na lista', function (table) {
-    esperado = table.hashes()[0]
-
-    assert.equal(res.status, 201);
-    assert.equal(res.data.success, true);
-    assert.equal(res.data.status_code, esperado.status_code);
-    assert.equal(res.data.status_message, esperado.status_message);
+Then('validar o resultado do filme adicionado na lista {string} {string} {string}', function (http, status_code, status_message) {
+    assert.equal(res.status, http);
+    assert.equal(res.data.status_code, status_code);
+    assert.equal(res.data.status_message, status_message);
 });
 
 When('realizar requisicao para ver o status de um filme id {string} na lista', async function (media_id) {
     res = await instance({
         method: 'get',
-        url: `/list/${list_id}/item_status?movie_id=${media_id}`
+        url: `/list/${list_id}/item_status?movie_id=${media_id}`,
+        validateStatus: function (status) {
+            return true;
+        },
     });
 });
 
@@ -124,8 +127,8 @@ When('realizar requisicao para deletar uma lista', async function () {
         method: 'delete',
         url: `/list/${list_id}`
     })
-    .catch(function (error) {
-    })
+        .catch(function (error) {
+        })
 });
 
 Then('validar o resultado da delecao da lista', function () {
