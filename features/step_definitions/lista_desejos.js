@@ -1,19 +1,14 @@
-const { Given, When, Then } = require('@cucumber/cucumber');
+const { Before, Given, When, Then } = require('@cucumber/cucumber');
 const axios = require('axios');
 const assert = require('assert');
 
-const access_token = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0YWM0ZGQ5ODU1ODAyYTY1NGJkNDE5ZWVkMWUzYTUxMSIsInN1YiI6IjYzMjEzYzJmMjcxNjcxMDA5MWNlNGZkMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.CAmEYps1XJ19aN1HzKujWrdLuarfmVdrnMW6NJBNAUU';
-
-const instance = axios.create({
-    baseURL: 'https://api.themoviedb.org/3',
-    timeout: 5000,
-    headers: {'Authorization': `Bearer ${access_token}`},
-    responseType: 'json',
-    responseEncoding: 'utf8'
-});
-
+let instance;
 let res;
 let list_id;
+
+Before(function () {
+    instance = axios.create(this.parameters);
+});
 
 Given('realizar requisicao para criar uma lista', async function (table) {
     res = await instance({
