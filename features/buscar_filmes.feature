@@ -2,7 +2,7 @@
 Feature: Buscar filmes
 
   @Buscar_filmes
-  Scenario Outline: Buscar filmes
+  Scenario Outline: Validar a busca de filmes
     Given realizar requisicao de busca de filme <page> "<search>" "pt-BR"
     Then validar o resultado da busca de filme <page> <pages> <results> <id> "<result>"
 

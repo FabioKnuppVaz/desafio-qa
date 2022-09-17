@@ -7,14 +7,14 @@ Feature: Listas de desejos
       | teste | teste       | pt-BR    |
 
   @Criar_lista
-  Scenario: Criar lista
+  Scenario: Validar a criacao de lista de desejos
     Then validar o resultado da criacao da lista
       | status_code | status_message                            |
       | 1           | The item/record was created successfully. |
     * realizar requisicao para deletar uma lista
 
   @Detalhes_lista
-  Scenario: Detalhes da lista
+  Scenario: Validar os detalhes da lista de desejos criada
     When realizar requisicao para ver os detalhes da lista
     Then validar o resultado dos detalhes da lista
       | created_by | description | iso_639_1 | name  |
@@ -22,7 +22,7 @@ Feature: Listas de desejos
     * realizar requisicao para deletar uma lista
 
   @Adicionar_filme_lista
-  Scenario Outline: Adicionar filme na lista
+  Scenario Outline: Validar a adicao de filme na lista de desejos
     When realizar requisicao para adicionar filme id "<id>" na lista
     Then validar o resultado do filme adicionado na lista "<http>" "<status_code>" "<status_message>"
     * realizar requisicao para deletar uma lista
@@ -34,14 +34,14 @@ Feature: Listas de desejos
       |    | 400  | 5           | Invalid parameters: Your request parameters are incorrect. |
 
   @Status_filme_lista
-  Scenario: Status de um filme na lista
+  Scenario: Validar o status de um filme adicionado a lista de desejos
     When realizar requisicao para adicionar filme id "18" na lista
     And realizar requisicao para ver o status de um filme id "18" na lista
     Then validar o resultado do status de um filme na lista
     * realizar requisicao para deletar uma lista
 
   @Remover_filme_lista
-  Scenario: Remover filme da lista
+  Scenario: Validar a remocao de um filme da lista de desejos
     When realizar requisicao para adicionar filme id "18" na lista
     And realizar requisicao para remover filme id "18" da lista
     Then validar o resultado do filme removido da lista
@@ -50,7 +50,7 @@ Feature: Listas de desejos
     * realizar requisicao para deletar uma lista
 
   @Limpar_lista
-  Scenario: Limpar lista
+  Scenario: Validar a limpeza da lista de desejos
     When realizar requisicao para adicionar filme id "18" na lista
     And realizar requisicao para limpar lista
     Then validar o resultado da limpeza da lista
@@ -59,6 +59,6 @@ Feature: Listas de desejos
     * realizar requisicao para deletar uma lista
 
   @Deletar_lista
-  Scenario: Deletar lista
+  Scenario: Validar a delecao da lista de desejos
     When realizar requisicao para deletar uma lista
     Then validar o resultado da delecao da lista
