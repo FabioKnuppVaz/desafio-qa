@@ -17,7 +17,7 @@ Given('realizar requisicao para criar uma lista', async function (table) {
         data: table.hashes()[0]
     });
 
-    list_id = res.data.list_id;
+    listId = res.data.list_id;
 });
 
 Then('validar o resultado da criacao da lista', function (table) {
